@@ -135,4 +135,14 @@ public class LoginActivity extends AppCompatActivity {
     public void loginWithGoogle(View view) {
         signIn();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser.getEmail() != null){
+            Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
+            startActivity(intent);
+        }
+    }
 }
