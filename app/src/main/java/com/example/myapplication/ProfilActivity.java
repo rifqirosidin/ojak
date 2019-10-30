@@ -1,9 +1,11 @@
 package com.example.myapplication;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,10 +53,28 @@ public class ProfilActivity extends AppCompatActivity {
     }
 
     public void logout(View view) {
-        mAuth.signOut();
-        Intent intent = new Intent(ProfilActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Apakah Anda Yakin");
+        builder.setMessage("Keluar dari akun ini");
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mAuth.signOut();
+                Intent intent = new Intent(ProfilActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog builder1 = builder.create();
+        builder1.show();
+
     }
 
     public void displayProfil()

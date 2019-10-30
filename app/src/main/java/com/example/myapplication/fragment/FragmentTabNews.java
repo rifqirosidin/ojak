@@ -13,13 +13,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.adapter.MainSliderAdapter;
 import com.example.myapplication.adapter.NewsAdapter;
 import com.example.myapplication.api.Endpoint;
 import com.example.myapplication.api.RetrofitClient;
 import com.example.myapplication.model.Article;
 import com.example.myapplication.model.News;
-import com.example.myapplication.model.Source;
-import com.squareup.picasso.Picasso;
+import com.example.myapplication.services.PicassoImageLoadingService;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import ss.com.bannerslider.ImageLoadingService;
+import ss.com.bannerslider.Slider;
 
 
 public class FragmentTabNews extends Fragment {
@@ -38,6 +41,9 @@ public class FragmentTabNews extends Fragment {
     private String topNews;
     ImageView imgTopNews;
     TextView tvTitleTopNews;
+    Slider slider;
+
+
     public FragmentTabNews() {
         // Required empty public constructor
     }
@@ -60,8 +66,11 @@ public class FragmentTabNews extends Fragment {
             progressBar = view.findViewById(R.id.progressBar);
             rvNews.setLayoutManager(new LinearLayoutManager(getContext()));
             progressBar.setVisibility(View.VISIBLE);
-//            imgTopNews = view.findViewById(R.id.img_top_news);
-//            tvTitleTopNews = view.findViewById(R.id.tv_title_top_news);
+
+            slider = view.findViewById(R.id.img_top_news);
+            Slider.init(new PicassoImageLoadingService(getContext()));
+
+
             displayNews();
         return view;
     }
@@ -79,12 +88,11 @@ public class FragmentTabNews extends Fragment {
                    articles = new ArrayList<>(response.body().getArticles());
 
                    adapter = new NewsAdapter(getContext(), articles);
+                    slider.setAdapter(new MainSliderAdapter(articles));
                    rvNews.setAdapter(adapter);
+
                 }
-//                for (int i = 0; i < 3 ; i++) {
-//                    Picasso.get().load(articles.get(i).getUrlToImage()).into(imgTopNews);
-//                    tvTitleTopNews.setText(articles.get(i).getTitle());
-//                }
+
             }
 
             @Override

@@ -37,8 +37,9 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0';
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0';
-    implementation 'com.github.smarteist:autoimageslider:1.3.2'
-    implementation 'com.github.smarteist:autoimageslider:1.3.2-appcompat'
+    implementation 'com.ss.bannerslider:bannerslider:2.0.0'
+    implementation 'com.github.lecho:hellocharts-library:1.5.8@aar'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -10,16 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+        <ss.com.bannerslider.Slider
             android:id="@+id/img_top_news"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toTopOf="@+id/guideline5"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/rv_news_list"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+            app:slider_animateIndicators="true"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline5"
@@ -49,11 +47,10 @@
             android:id="@+id/rv_news_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_top_news" >
+            app:layout_constraintTop_toTopOf="@+id/guideline5">
 
         </android.support.v7.widget.RecyclerView>
 
@@ -66,7 +63,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/rv_news_list"
+            app:layout_constraintTop_toTopOf="@+id/img_top_news"
             app:layout_constraintVertical_bias="0.308"
             tools:visibility="gone" />
 

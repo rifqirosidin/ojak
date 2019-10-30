@@ -16,6 +16,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:onClick="back"
         app:srcCompat="@drawable/ic_back"
         tools:ignore="VectorDrawableCompat" />
 

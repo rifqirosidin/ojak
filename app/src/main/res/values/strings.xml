@@ -4,6 +4,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="API_KEY">68a59c0b881b42eb851e1fc3fcb60df8</string>
+    <string name="keterangan_laporan">laporkan tinda kekerasan yang terjadi di sekitarmu dengan mengisi form dibawah. kontribusimu sangat akan membantu dalam mengurangi tindak kriminal di indonesia</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 </resources>
