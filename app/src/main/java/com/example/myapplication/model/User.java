@@ -4,6 +4,9 @@ public class User {
 
     private String username, nohp;
 
+    public User() {
+    }
+
     public User(String username, String nohp) {
         this.username = username;
         this.nohp = nohp;
