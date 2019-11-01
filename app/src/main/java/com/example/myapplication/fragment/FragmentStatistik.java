@@ -1,7 +1,5 @@
 package com.example.myapplication.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,55 +8,36 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.R;
 
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentStatistik.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentStatistik#newInstance} factory method to
- * create an instance of this fragment.
- */
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.view.LineChartView;
+
 public class FragmentStatistik extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    LineChartView lineChartViewPelecehanSosial, kekerasanKeluarga, kekerasanAnak;
+    String[] tahun = {"2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017"};
+    int[] yAxisData = {50, 20, 15, 30, 20, 60, 15};
+    List yAxisValues = new ArrayList();
+    List axisValues = new ArrayList();
 
-    private OnFragmentInteractionListener mListener;
 
     public FragmentStatistik() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentStatistik.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentStatistik newInstance(String param1, String param2) {
-        FragmentStatistik fragment = new FragmentStatistik();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -66,45 +45,38 @@ public class FragmentStatistik extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fragment_statistik, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_fragment_statistik, container, false);
+         lineChartViewPelecehanSosial = view.findViewById(R.id.pelecehat_sosial_grafik);
+         kekerasanKeluarga = view.findViewById(R.id.kekerasan_keluarga_grafik);
+         kekerasanAnak = view.findViewById(R.id.kekerasan_anak_grafik);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+        Line line = new Line(yAxisValues);
+        for(int i = 0; i < tahun.length; i++){
+            axisValues.add(i, new AxisValue(i).setLabel(tahun[i]));
         }
+
+        for (int i = 0; i < yAxisData.length; i++){
+            yAxisValues.add(new PointValue(i, yAxisData[i]));
+        }
+        List lines = new ArrayList();
+        lines.add(line);
+        LineChartData data = new LineChartData();
+        data.setLines(lines);
+
+        Axis axis = new Axis();
+        axis.setValues(axisValues);
+        data.setAxisXBottom(axis);
+        Axis yAxis = new Axis();
+        data.setAxisYLeft(yAxis);
+
+        lineChartViewPelecehanSosial.setLineChartData(data);
+        kekerasanKeluarga.setLineChartData(data);
+        kekerasanAnak.setLineChartData(data);
+
+
+        return view;
     }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }
