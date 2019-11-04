@@ -2,6 +2,7 @@ package com.example.myapplication.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -64,11 +65,9 @@ public class FragmentTabNews extends Fragment {
         View view = inflater.inflate(R.layout.fragment_fragment_tab_news, container, false);
             rvNews = view.findViewById(R.id.rv_news_list);
             progressBar = view.findViewById(R.id.progressBar);
-            rvNews.setLayoutManager(new LinearLayoutManager(getContext()));
+            rvNews.setHasFixedSize(true);
+            rvNews.setLayoutManager(new GridLayoutManager(getContext(), 2));
             progressBar.setVisibility(View.VISIBLE);
-
-            slider = view.findViewById(R.id.img_top_news);
-            Slider.init(new PicassoImageLoadingService(getContext()));
 
 
             displayNews();
@@ -88,7 +87,6 @@ public class FragmentTabNews extends Fragment {
                    articles = new ArrayList<>(response.body().getArticles());
 
                    adapter = new NewsAdapter(getContext(), articles);
-                    slider.setAdapter(new MainSliderAdapter(articles));
                    rvNews.setAdapter(adapter);
 
                 }
@@ -102,12 +100,5 @@ public class FragmentTabNews extends Fragment {
         });
 
     }
-
-    public void listNews(List<Article> list){
-        System.out.println("response"+list);
-        adapter = new NewsAdapter(getContext(), list);
-        rvNews.setAdapter(adapter);
-    }
-
 
 }

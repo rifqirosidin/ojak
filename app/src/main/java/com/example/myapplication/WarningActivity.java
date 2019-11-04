@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -27,12 +28,21 @@ public class WarningActivity extends AppCompatActivity {
         context = getApplicationContext();
         activity = WarningActivity.this;
 
+
         tvAlarmPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
                 Ringtone ringtone = RingtoneManager.getRingtone(context,uri);
-                ringtone.play();
+
+                if (play){
+
+                    ringtone.play();
+
+                    play = false;
+                } else {
+                    ringtone.stop();
+                }
             }
         });
     }
