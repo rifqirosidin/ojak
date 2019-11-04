@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/img_news_list"
         android:layout_width="100dp"
-        android:layout_height="90dp"
+        android:layout_height="85dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
