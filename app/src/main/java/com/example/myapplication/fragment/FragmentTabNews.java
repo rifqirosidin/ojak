@@ -1,9 +1,9 @@
 package com.example.myapplication.fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,24 +12,22 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.R;
-import com.example.myapplication.adapter.MainSliderAdapter;
 import com.example.myapplication.adapter.NewsAdapter;
 import com.example.myapplication.api.Endpoint;
 import com.example.myapplication.api.RetrofitClient;
 import com.example.myapplication.model.Article;
 import com.example.myapplication.model.News;
-import com.example.myapplication.services.PicassoImageLoadingService;
+
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ss.com.bannerslider.ImageLoadingService;
 import ss.com.bannerslider.Slider;
 
 
@@ -39,10 +37,8 @@ public class FragmentTabNews extends Fragment {
     ArrayList<Article> articles;
     NewsAdapter adapter;
     ProgressBar progressBar;
-    private String topNews;
-    ImageView imgTopNews;
-    TextView tvTitleTopNews;
-    Slider slider;
+
+
 
 
     public FragmentTabNews() {
@@ -69,8 +65,12 @@ public class FragmentTabNews extends Fragment {
             rvNews.setLayoutManager(new GridLayoutManager(getContext(), 2));
             progressBar.setVisibility(View.VISIBLE);
 
+            try {
+                displayNews();
+            } catch (Exception e){
+                Toast.makeText(getContext(), "Cek Koneksi Internet", Toast.LENGTH_LONG).show();
+            }
 
-            displayNews();
         return view;
     }
 
@@ -102,3 +102,7 @@ public class FragmentTabNews extends Fragment {
     }
 
 }
+
+
+
+

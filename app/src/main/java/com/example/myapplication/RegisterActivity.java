@@ -61,20 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
                 noHP = edtNoHp.getText().toString().trim();
                 password = edtPassword.getText().toString().trim();
 
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (TextUtils.isEmpty(password)) {
-                    Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (password.length() < 6) {
-                    Toast.makeText(getApplicationContext(), "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+               validasi();
 
                 btnRegister.setText("Loading...");
                 mAuth.createUserWithEmailAndPassword(email, password)
@@ -96,6 +83,33 @@ public class RegisterActivity extends AppCompatActivity {
                         });
             }
         });
+    }
+
+    public void validasi()
+    {
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(username)) {
+            Toast.makeText(getApplicationContext(), "Enter Username!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(noHP)) {
+            Toast.makeText(getApplicationContext(), "Enter No HP!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (password.length() < 6) {
+            Toast.makeText(getApplicationContext(), "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
     public void biodata(String username, String nohp)

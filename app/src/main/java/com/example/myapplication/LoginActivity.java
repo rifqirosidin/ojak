@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -128,23 +129,37 @@ public class LoginActivity extends AppCompatActivity {
 
     public void login(View view) {
         inisialization();
+
         email = edtEmail.getText().toString().trim();
         password = edtPassword.getText().toString().trim();
-        btnLogin.setText("Loading...");
 
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this,new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
 
-                if (task.isSuccessful()){
-                    Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(getApplicationContext(), "login failed", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(email)){
+            edtEmail.setError("Email harus diisi");
+        }
+
+        if (TextUtils.isEmpty(password)){
+            edtPassword.setError("Password harus diisi");
+        }
+
+        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
+            btnLogin.setText("Loading...");
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this,new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+
+                    if (task.isSuccessful()){
+                        Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "login failed", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
+            });
+        }
+
+
     }
 
     public void loginWithGoogle(View view) {
