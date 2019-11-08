@@ -65,6 +65,4 @@ public class FormKomplain extends AppCompatActivity {
 
     }
 
-
-
 }

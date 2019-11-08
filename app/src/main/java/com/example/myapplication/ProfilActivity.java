@@ -58,8 +58,8 @@ public class ProfilActivity extends AppCompatActivity {
 
     public void logout(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Apakah Anda Yakin");
-        builder.setMessage("Keluar dari akun ini");
+        builder.setTitle("Apakah Anda Yakin?");
+        builder.setMessage("keluar dari akun ini");
 
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override

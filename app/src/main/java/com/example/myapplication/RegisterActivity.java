@@ -79,7 +79,6 @@ public class RegisterActivity extends AppCompatActivity {
                                     btnRegister.setText("Register");
 
                                     if (!task.isSuccessful()){
-
                                         Toast.makeText(getApplicationContext(), "Email Already Exist", Toast.LENGTH_SHORT).show();
 
                                     } else {

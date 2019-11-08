@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,18 +29,27 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     public void resetPassword(View view) {
         reset.setText("Loading...");
         String email = edtEmail.getText().toString().trim();
-        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "reset password sukses silahkan cek email anda", Toast.LENGTH_SHORT).show();
-                            reset.setText("SEND CODE");
-                            edtEmail.setText("");
-                        } else {
-                            Toast.makeText(getApplicationContext(), "reset password gagal", Toast.LENGTH_SHORT).show();
+
+        if (TextUtils.isEmpty(email)){
+            edtEmail.setError("kolom harus diisi");
+            reset.setText("SEND CODE");
+        }
+        if (!TextUtils.isEmpty(email)){
+            FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(), "reset password sukses silahkan cek email anda", Toast.LENGTH_SHORT).show();
+                                reset.setText("SEND CODE");
+                                edtEmail.setText("");
+                            } else {
+                                Toast.makeText(getApplicationContext(), "reset password gagal", Toast.LENGTH_SHORT).show();
+                                reset.setText("SEND CODE");
+                            }
                         }
-                    }
-                });
+                    });
+        }
+
     }
 }
