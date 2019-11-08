@@ -48,7 +48,7 @@
 
     <EditText
         android:id="@+id/edt_descripsi_problem"
-        android:layout_width="371dp"
+        android:layout_width="0dp"
         android:layout_height="209dp"
         android:layout_marginTop="8dp"
         android:ems="10"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView39" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btn_form_submit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

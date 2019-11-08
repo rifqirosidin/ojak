@@ -1,16 +1,20 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.RestrictionEntry;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.model.Laporan;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +29,7 @@ public class FormKomplain extends AppCompatActivity {
     DatabaseReference myRef;
     FirebaseDatabase mDatabase;
     FirebaseUser user;
+    Button btnSubmit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +39,7 @@ public class FormKomplain extends AppCompatActivity {
         spinnerBulan = findViewById(R.id.spinner_bulan);
         tvKategori = findViewById(R.id.tv_kategori);
         mDatabase = FirebaseDatabase.getInstance();
+        btnSubmit = findViewById(R.id.btn_form_submit);
         myRef = mDatabase.getReference("Laporan");
         user = FirebaseAuth.getInstance().getCurrentUser();
         Intent intent = getIntent();
@@ -47,7 +53,16 @@ public class FormKomplain extends AppCompatActivity {
         bulan = spinnerBulan.getSelectedItem().toString();
         Laporan laporan = new Laporan(user.getEmail(),bulan, deskripsi, kategori);
 
-        myRef.child(bulan).push().setValue(laporan);
+        btnSubmit.setText("Loading...");
+        try {
+            myRef.child(bulan).push().setValue(laporan);
+            edtDeskripsi.setText("");
+            btnSubmit.setText("Submit");
+        }catch (Exception e){
+            Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT);
+            btnSubmit.setText("Submit");
+        }
+
     }
 
 
