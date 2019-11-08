@@ -96,6 +96,7 @@ public class FragmentTabNews extends Fragment {
             @Override
             public void onFailure(Call<News> call, Throwable t) {
                 Log.e("error", t.getMessage());
+                Toast.makeText(getContext(), "Error Koneksi", Toast.LENGTH_LONG).show();
             }
         });
 

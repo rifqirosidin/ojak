@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.myapplication.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseDatabase mDatabase;
     DatabaseReference myRef;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void register(){
+
         initialization();
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,26 +64,39 @@ public class RegisterActivity extends AppCompatActivity {
                 noHP = edtNoHp.getText().toString().trim();
                 password = edtPassword.getText().toString().trim();
 
+                if (password.length() < 6) {
+                    Toast.makeText(getApplicationContext(), "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                validasi();
+                if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(username)){
+                    btnRegister.setText("Loading...");
+                    mAuth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    btnRegister.setText("Register");
 
-                btnRegister.setText("Loading...");
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                btnRegister.setText("Register");
+                                    if (!task.isSuccessful()){
 
-                                if (!task.isSuccessful()){
-                                    Toast.makeText(getApplicationContext(), "Register Gagal", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Email Already Exist", Toast.LENGTH_SHORT).show();
 
-                                } else {
-                                    biodata(email, noHP);
-                                    Toast.makeText(getApplicationContext(), "Register Sukses", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                                    finish();
+                                    } else {
+                                        biodata(username, noHP);
+                                        Toast.makeText(getApplicationContext(), "Register Sukses", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                        finish();
+                                    }
                                 }
-                            }
-                        });
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
             }
         });
     }
@@ -88,28 +104,26 @@ public class RegisterActivity extends AppCompatActivity {
     public void validasi()
     {
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
-            return;
+            edtEmail.setError("harus diisi");
+
         }
 
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
-            return;
+            edtPassword.setError("harus diisi");
+
         }
 
         if (TextUtils.isEmpty(username)) {
-            Toast.makeText(getApplicationContext(), "Enter Username!", Toast.LENGTH_SHORT).show();
-            return;
+            edtUsername.setError("harus diisi");
+
         }
         if (TextUtils.isEmpty(noHP)) {
-            Toast.makeText(getApplicationContext(), "Enter No HP!", Toast.LENGTH_SHORT).show();
-            return;
+            edtNoHp.setError("harus diisi");
+
         }
 
-        if (password.length() < 6) {
-            Toast.makeText(getApplicationContext(), "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+
+
     }
 
     public void biodata(String username, String nohp)
@@ -129,6 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
     public void back(View view) {
         Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 
 

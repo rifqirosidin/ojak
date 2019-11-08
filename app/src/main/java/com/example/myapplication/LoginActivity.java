@@ -153,6 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
+                        btnLogin.setText("Login");
                         Toast.makeText(getApplicationContext(), "login failed", Toast.LENGTH_SHORT).show();
                     }
                 }

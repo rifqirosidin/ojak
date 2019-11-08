@@ -70,12 +70,12 @@
             android:text="Pelecehan Seksual"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView19"
+            app:layout_constraintBottom_toBottomOf="@+id/linkSeksual"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView19" />
+            app:layout_constraintTop_toTopOf="@+id/linkSeksual" />
 
         <TextView
-            android:id="@+id/textView19"
+            android:id="@+id/linkSeksual"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -83,6 +83,7 @@
             android:layout_marginRight="16dp"
             android:background="@color/colorPrimary"
             android:padding="8dp"
+
             android:text="Lapor"
             android:textColor="@android:color/white"
             android:textStyle="bold"
@@ -98,12 +99,12 @@
             android:text="Kekerasan Keluarga"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView27"
+            app:layout_constraintBottom_toBottomOf="@+id/linkkekearanKeluarga"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView27" />
+            app:layout_constraintTop_toTopOf="@+id/linkkekearanKeluarga" />
 
         <TextView
-            android:id="@+id/textView27"
+            android:id="@+id/linkkekearanKeluarga"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -115,7 +116,7 @@
             android:textColor="@android:color/white"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView19" />
+            app:layout_constraintTop_toBottomOf="@+id/linkSeksual" />
 
         <TextView
             android:id="@+id/textView28"
@@ -126,12 +127,12 @@
             android:text="Kekerasan Anak"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView29"
+            app:layout_constraintBottom_toBottomOf="@+id/linksKekerasanAnak"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView29" />
+            app:layout_constraintTop_toTopOf="@+id/linksKekerasanAnak" />
 
         <TextView
-            android:id="@+id/textView29"
+            android:id="@+id/linksKekerasanAnak"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -143,6 +144,6 @@
             android:textColor="@android:color/white"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView27" />
+            app:layout_constraintTop_toBottomOf="@+id/linkkekearanKeluarga" />
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>

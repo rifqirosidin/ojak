@@ -14,10 +14,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FormKomplain"
-            android:parentActivityName=".HomePageActivity"></activity>
-        <activity android:name=".DetailNewsActivity"
-            android:parentActivityName=".HomePageActivity"/>
+        <activity android:name=".UpdatePasswordActivity"></activity>
+        <activity
+            android:name=".FormKomplain"
+            android:label="Form Laporan"
+            android:parentActivityName=".HomePageActivity" />
+        <activity
+            android:name=".DetailNewsActivity"
+            android:parentActivityName=".HomePageActivity" />
         <activity
             android:name=".WarningActivity"
             android:screenOrientation="portrait" />
@@ -41,8 +45,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
     </application>
 
 </manifest>

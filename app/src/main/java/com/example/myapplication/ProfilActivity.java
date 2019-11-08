@@ -9,7 +9,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfilActivity extends AppCompatActivity {
 
@@ -33,7 +37,7 @@ public class ProfilActivity extends AppCompatActivity {
     TextView tvDetailProfil, tvEmail, tvUsername;
     FirebaseUser user;
     ArrayList<User> users;
-
+    View dialogView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +91,7 @@ public class ProfilActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
+                tvDetailProfil.setText(user.getAbout());
                 tvUsername.setText(user.getUsername());
             }
 
@@ -102,5 +107,35 @@ public class ProfilActivity extends AppCompatActivity {
         Intent intent = new Intent(ProfilActivity.this, HomePageActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public void goToUPdatePassword(View view) {
+        Intent intent = new Intent(ProfilActivity.this, UpdatePasswordActivity.class);
+        startActivity(intent);
+    }
+
+    public void editAbout(View view) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        dialogView = inflater.inflate(R.layout.update_about_profil, null);
+        dialog.setView(dialogView);
+
+        final EditText edtAbout = dialogView.findViewById(R.id.edt_about_profil);
+        dialog.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String about = edtAbout.getText().toString().trim();
+                mRef = database.getReference("users");
+                HashMap<String, Object> profil = new HashMap<>();
+                profil.put("about", about);
+                mRef.child(user.getUid()).updateChildren(profil);
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }
