@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.myapplication.model.User;
@@ -37,14 +38,17 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseDatabase database;
     DatabaseReference myRef;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
+        inisialization();
          mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("users");
+        progressBar = findViewById(R.id.loading);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -54,8 +58,10 @@ public class LoginActivity extends AppCompatActivity {
 
     }
     private void signIn() {
+
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, 101);
+
     }
 
     @Override
@@ -69,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
+
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
 
@@ -79,6 +86,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        progressBar.setVisibility(View.VISIBLE);
+        disableForm(false);
         Log.d("debug", "firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -87,13 +96,14 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
-
+                            progressBar.setVisibility(View.GONE);
                             Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
                             startActivity(intent);
                         } else {
+                            progressBar.setVisibility(View.GONE);
                             // If sign in fails, display a message to the user.
                             Log.w("debug", "signInWithCredential:failure", task.getException());
+                            disableForm(true);
                             Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();
                         }
 
@@ -102,14 +112,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    public void biodata(String username, String nohp)
-    {
-        String uuid = mAuth.getUid();
-        User user = new User(username, nohp);
-
-        myRef.child(uuid).setValue(user);
-
-    }
 
     public void formRegister(View view) {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -128,7 +130,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login(View view) {
-        inisialization();
 
         email = edtEmail.getText().toString().trim();
         password = edtPassword.getText().toString().trim();
@@ -165,6 +166,11 @@ public class LoginActivity extends AppCompatActivity {
 
     public void loginWithGoogle(View view) {
         signIn();
+    }
+
+    public void disableForm(boolean status){
+        edtEmail.setEnabled(status);
+        edtPassword.setEnabled(status);
     }
 
     @Override
