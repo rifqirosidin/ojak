@@ -46,7 +46,8 @@ public class UpdatePasswordActivity extends AppCompatActivity {
                 String newPassword = edtPassword.getText().toString();
 
                 if (TextUtils.isEmpty(newPassword)){
-                    edtOldPassword.setError("Kolom ini harus diisi");
+                    edtPassword.setError("Kolom ini harus diisi");
+                    btnUpdatePassword.setText("Update Password");
                 }
 
                 if (!TextUtils.isEmpty(newPassword)){
