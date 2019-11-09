@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.RestrictionEntry;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -53,14 +54,20 @@ public class FormKomplain extends AppCompatActivity {
         bulan = spinnerBulan.getSelectedItem().toString();
         Laporan laporan = new Laporan(user.getEmail(),bulan, deskripsi, kategori);
 
-        btnSubmit.setText("Loading...");
-        try {
-            myRef.child(bulan).push().setValue(laporan);
-            edtDeskripsi.setText("");
-            btnSubmit.setText("Submit");
-        }catch (Exception e){
-            Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT);
-            btnSubmit.setText("Submit");
+        if (TextUtils.isEmpty(deskripsi)){
+            Toast.makeText(getApplicationContext(), "Kolom deskripsi harus diisi !!", Toast.LENGTH_SHORT).show();
+        }
+        if (!TextUtils.isEmpty(deskripsi)){
+            btnSubmit.setText("Loading...");
+            try {
+                myRef.child(bulan).push().setValue(laporan);
+                edtDeskripsi.setText("");
+                btnSubmit.setText("Submit");
+                Toast.makeText(getApplicationContext(), "Sukses", Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+                Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();
+                btnSubmit.setText("Submit");
+            }
         }
 
     }

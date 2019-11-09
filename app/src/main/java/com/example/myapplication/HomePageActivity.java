@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.myapplication.adapter.TabAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class HomePageActivity extends AppCompatActivity {
 
@@ -16,6 +18,8 @@ public class HomePageActivity extends AppCompatActivity {
     ViewPager viewPager;
     TabAdapter adapter;
     TabItem tabNews, tabLapor, tabStatistik;
+    FirebaseAuth mAuth;
+    FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +31,12 @@ public class HomePageActivity extends AppCompatActivity {
 //        tabNews = findViewById(R.id.tab_news);
 //        tabLapor = findViewById(R.id.tab_lapor);
 //        tabStatistik = findViewById(R.id.tab_statistik);
-
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        if (user == null){
+            Intent intent = new Intent(HomePageActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
         tabLayout.addTab(tabLayout.newTab().setText("News"));
         tabLayout.addTab(tabLayout.newTab().setText("Lapor"));
         tabLayout.addTab(tabLayout.newTab().setText("Statistik"));
