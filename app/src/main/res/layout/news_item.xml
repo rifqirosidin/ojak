@@ -5,16 +5,16 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="left"
-    android:layout_marginLeft="16dp"
-    android:layout_marginTop="16dp"
-    android:layout_marginRight="8dp">
+    android:layout_marginTop="12dp"
+    android:layout_marginRight="8dp"
+    android:background="?android:selectableItemBackground">
 
     <ImageView
         android:id="@+id/img_news_list"
         android:layout_width="200dp"
         android:layout_height="140dp"
-        android:layout_marginTop="8dp"
         android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />

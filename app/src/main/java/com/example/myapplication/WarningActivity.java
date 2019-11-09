@@ -18,8 +18,7 @@ public class WarningActivity extends AppCompatActivity {
     private Activity activity;
     private TextView tvAlarmPlay, tvOff;
     boolean play = true;
-    Uri uri;
-    Ringtone ringtone;
+    MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,18 +29,18 @@ public class WarningActivity extends AppCompatActivity {
         tvAlarmPlay = findViewById(R.id.tv_alarm_play);
         context = getApplicationContext();
         activity = WarningActivity.this;
-         uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-         ringtone = RingtoneManager.getRingtone(context,uri);
+
 
         tvAlarmPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (play){
-                    ringtone.play();
+                    mediaPlayer = MediaPlayer.create(context, R.raw.alarm_tone);
+                    mediaPlayer.start();
                     play = false;
                     tvAlarmPlay.setText("OFF");
                 } else {
-                    ringtone.stop();
+                    mediaPlayer.stop();
                     play = true;
                     tvAlarmPlay.setText("ON");
                 }
