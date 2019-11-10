@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.myapplication.model.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -80,6 +81,7 @@ public class ProfilActivity extends AppCompatActivity {
 
     public void displayProfil() {
         tvEmail.setText(user.getEmail());
+        userWithLoginGoogle();
 //        tvDetailProfil.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua");
         mRef = FirebaseDatabase.getInstance().getReference("users").child(mAuth.getUid());
 
@@ -87,8 +89,15 @@ public class ProfilActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                tvDetailProfil.setText(user.getAbout());
-                tvUsername.setText(user.getUsername());
+                try {
+                    tvDetailProfil.setText(user.getAbout());
+                    if (!user.getUsername().isEmpty()){
+                        tvUsername.setText(user.getUsername());
+                    }
+
+                } catch (Exception e) {
+                    Log.e("error", e.getMessage());
+                }
             }
 
             @Override
@@ -98,6 +107,13 @@ public class ProfilActivity extends AppCompatActivity {
         });
     }
 
+    public void userWithLoginGoogle() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user.getDisplayName() != null) {
+            tvUsername.setText(user.getDisplayName());
+        }
+
+    }
 
     public void backPage(View view) {
         Intent intent = new Intent(ProfilActivity.this, HomePageActivity.class);
@@ -135,9 +151,9 @@ public class ProfilActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    public void checkUserAndDisplayProfil(){
+    public void checkUserAndDisplayProfil() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null){
+        if (currentUser == null) {
             Intent intent = new Intent(ProfilActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();

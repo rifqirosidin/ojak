@@ -2,13 +2,14 @@ package com.example.myapplication.model;
 
 public class Laporan {
 
-    String name, bulan, deskripsi, kategori;
+    String name, bulan, deskripsi, kategori, urlImage;
 
-    public Laporan(String name, String bulan, String deskripsi, String kategori) {
+    public Laporan(String name, String bulan, String deskripsi, String kategori, String urlImage) {
         this.name = name;
         this.bulan = bulan;
         this.deskripsi = deskripsi;
         this.kategori = kategori;
+        this.urlImage = urlImage;
     }
 
     public String getBulan() {
@@ -25,5 +26,9 @@ public class Laporan {
 
     public String getName() {
         return name;
+    }
+
+    public String getUrlImage() {
+        return urlImage;
     }
 }
