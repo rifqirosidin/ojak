@@ -4,6 +4,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="API_KEY">68a59c0b881b42eb851e1fc3fcb60df8</string>
+    <string name="CLIENT_ID">437933253587-4l7meg56cb8t5i4ra1acjkgckeqvh7ub.apps.googleusercontent.com</string>
+
     <string name="keterangan_laporan">laporkan tinda kekerasan yang terjadi di sekitarmu dengan mengisi form dibawah. kontribusimu sangat akan membantu dalam mengurangi tindak kriminal di indonesia</string>
     <string-array name="bulan">
         <item>Januari</item>
@@ -18,5 +20,9 @@
         <item>November</item>
         <item>Desember</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <string-array name="tgl_lahir">
+        <item>Laki - Laki</item>
+        <item>Perempuan</item>
+    </string-array>
 </resources>

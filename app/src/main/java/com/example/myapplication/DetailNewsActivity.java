@@ -1,8 +1,10 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,7 +13,7 @@ import com.squareup.picasso.Picasso;
 public class DetailNewsActivity extends AppCompatActivity {
     TextView tvTitle, tvContent, tvAuthor, tvPublish, tvSource;
     ImageView imageView;
-    String title, content, author, publish, urlImage, source;
+    String title, content, author, publish, urlImage, source, url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +32,7 @@ public class DetailNewsActivity extends AppCompatActivity {
         publish = intent.getStringExtra("PUBLISH");
         urlImage = intent.getStringExtra("IMG");
         source = intent.getStringExtra("SOURCE");
+        url = intent.getStringExtra("URL");
 
         tvTitle.setText(title);
         tvContent.setText(content);
@@ -38,5 +41,11 @@ public class DetailNewsActivity extends AppCompatActivity {
         tvSource.setText(source);
 
         Picasso.get().load(urlImage).into(imageView);
+    }
+
+    public void readMore(View view) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
     }
 }
