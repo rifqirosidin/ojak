@@ -203,7 +203,7 @@ public class ProfilActivity extends AppCompatActivity {
     }
 
 
-    public void jenisKelamin(View view) {
+    public void gender(View view) {
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
