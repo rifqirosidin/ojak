@@ -1,55 +1,67 @@
 package com.example.myapplication.fragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.FormKomplain;
 import com.example.myapplication.R;
+import com.example.myapplication.model.WarningReport;
+import com.google.android.gms.auth.api.signin.GoogleSignInApi;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentLapor.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentLapor#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class FragmentLapor extends Fragment implements View.OnClickListener {
+public class FragmentLapor extends Fragment implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    FirebaseDatabase mDatabase;
+    DatabaseReference mDatabaseRef;
+    FirebaseUser user;
+    TextView linkSeksual, linkKeluarga, linkAnak, tvAlarmSeksual, tvAlarmAnak, tvAlarmKeluarga;
 
-    TextView linkSeksual, linkKeluarga, linkAnak;
+    LocationManager locationManager;
+    String provider;
+    Location location;
+    private GoogleApiClient mGoogleApiClient;
+    String  latitude = "0";
+    String  longitude = " 0";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    boolean play = true;
+    MediaPlayer mediaPlayer;
 
     public FragmentLapor() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentLapor.
-     */
-    // TODO: Rename and change types and number of parameters
     public static FragmentLapor newInstance(String param1, String param2) {
         FragmentLapor fragment = new FragmentLapor();
         Bundle args = new Bundle();
@@ -62,24 +74,36 @@ public class FragmentLapor extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupGoogleAPI();
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
-    @Override
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setupGoogleAPI();
         // Inflate the layout for this fragment
-         View view = inflater.inflate(R.layout.fragment_fragment_lapor, container, false);
-            linkSeksual = view.findViewById(R.id.linkSeksual);
-            linkKeluarga = view.findViewById(R.id.linkkekearanKeluarga);
-            linkAnak = view.findViewById(R.id.linksKekerasanAnak);
+        View view = inflater.inflate(R.layout.fragment_fragment_lapor, container, false);
+        linkSeksual = view.findViewById(R.id.linkSeksual);
+        linkKeluarga = view.findViewById(R.id.linkkekearanKeluarga);
+        linkAnak = view.findViewById(R.id.linksKekerasanAnak);
+        tvAlarmAnak = view.findViewById(R.id.tv_alarm_kekerasan_anak);
+        tvAlarmKeluarga = view.findViewById(R.id.tv_alarm_keluarga);
+        tvAlarmSeksual = view.findViewById(R.id.tv_link_alarm_seksual);
+        mDatabase = FirebaseDatabase.getInstance();
+        mDatabaseRef = mDatabase.getReference("Laporan");
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+
 
             linkSeksual.setOnClickListener(this);
             linkKeluarga.setOnClickListener(this);
             linkAnak.setOnClickListener(this);
+            tvAlarmSeksual.setOnClickListener(this);
+            tvAlarmKeluarga.setOnClickListener(this);
+            tvAlarmAnak.setOnClickListener(this);
          return view;
     }
 
@@ -90,7 +114,42 @@ public class FragmentLapor extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void setupGoogleAPI(){
+        // initialize Google API Client
+        mGoogleApiClient = new GoogleApiClient
+                .Builder(getContext())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+    }
 
+
+    public void alarmAndLaporan(String type)
+    {
+        if (play){
+            mediaPlayer = MediaPlayer.create(getContext(), R.raw.alarm_tone);
+            mediaPlayer.start();
+            laporan(type);
+            play = false;
+        } else {
+
+            mediaPlayer.stop();
+            play = true;
+        }
+    }
+
+    public void laporan(String type){
+        String email = user.getEmail();
+        if (location != null){
+            latitude =  String.valueOf(location.getLatitude());
+            longitude = String.valueOf(location.getLongitude());
+        }
+
+        WarningReport report = new WarningReport(type, email, latitude, longitude);
+        mDatabaseRef.child(user.getUid()).child(type).push().setValue(report);
+        Toast.makeText(getContext(), "Laporan Sukses" , Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public void onClick(View v) {
@@ -105,9 +164,39 @@ public class FragmentLapor extends Fragment implements View.OnClickListener {
             case R.id.linksKekerasanAnak:
                 goToForm("Kekerasan Anak");
                 break;
+            case R.id.tv_alarm_kekerasan_anak:
+                alarmAndLaporan("Kekerasan Anak");
+                break;
+            case R.id.tv_alarm_keluarga:
+                alarmAndLaporan("Kekerasan Keluarga");
+                break;
+            case R.id.tv_link_alarm_seksual:
+                alarmAndLaporan("kekerasan seksual");
+                break;
 
         }
     }
+
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        location = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+        if (location != null) {
+//            Toast.makeText(getContext()," Connected to Google Location API", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
@@ -119,4 +208,20 @@ public class FragmentLapor extends Fragment implements View.OnClickListener {
         intent.putExtra("KATEGORI", kategori);
         startActivity(intent);
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // connect ke Google API Client ketika start
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // disconnect ke Google API Client ketika activity stopped
+        mGoogleApiClient.disconnect();
+    }
+
+
 }

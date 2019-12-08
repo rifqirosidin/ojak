@@ -254,4 +254,5 @@ public class ProfilActivity extends AppCompatActivity {
         });
         dialog.show();
     }
+
 }

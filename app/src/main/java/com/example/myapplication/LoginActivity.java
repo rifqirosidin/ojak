@@ -42,9 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference myRef;
     ProgressBar progressBar;
-    private static final String TAG = "AndroidClarified";
-    private GoogleSignInClient googleSignInClient;
-    private SignInButton googleSignInButton;
+    private static final String TAG = "debugging";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,16 +54,17 @@ public class LoginActivity extends AppCompatActivity {
         myRef = database.getReference("users");
         progressBar = findViewById(R.id.loading);
 
-//        googleSignInButton = findViewById(R.id.sign_in_button);
+
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(String.valueOf(R.string.CLIENT_ID))
+//                .requestEmail()
+//                .build();
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("437933253587-4l7meg56cb8t5i4ra1acjkgckeqvh7ub.apps.googleusercontent.com")
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
-//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken(getString(R.string.default_web_client_id))
-//                .requestEmail()
-//                .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
     }
@@ -78,9 +77,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "tessssssssss");
+        Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
+        startActivity(intent);
+        finish();
         if (resultCode == Activity.RESULT_OK)
-
             switch (requestCode) {
                 case 101:
                     try {
@@ -88,7 +88,8 @@ public class LoginActivity extends AppCompatActivity {
                         // a listener.
                         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                         GoogleSignInAccount account = task.getResult(ApiException.class);
-                        onLoggedIn(account);
+//                        onLoggedIn(account);
+                        firebaseAuthWithGoogle(account);
                     } catch (ApiException e) {
                         // The ApiException status code indicates the detailed failure reason.
                         Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
@@ -99,7 +100,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void onLoggedIn(GoogleSignInAccount account) {
         Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
-//        intent.putExtra(ProfileActivity.GOOGLE_ACCOUNT, googleSignInAccount);
         startActivity(intent);
         finish();
     }

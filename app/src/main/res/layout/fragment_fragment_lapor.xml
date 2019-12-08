@@ -145,5 +145,54 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linkkekearanKeluarga" />
+
+        <TextView
+            android:id="@+id/tv_link_alarm_seksual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="Alarm"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/linkSeksual"
+            app:layout_constraintEnd_toStartOf="@+id/linkSeksual"
+            app:layout_constraintTop_toTopOf="@+id/linkSeksual" />
+
+        <TextView
+            android:id="@+id/tv_alarm_keluarga"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="Alarm"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/linkkekearanKeluarga"
+            app:layout_constraintEnd_toStartOf="@+id/linkkekearanKeluarga"
+            app:layout_constraintTop_toTopOf="@+id/linkkekearanKeluarga" />
+
+        <TextView
+            android:id="@+id/tv_alarm_kekerasan_anak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="Alarm"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/linksKekerasanAnak"
+            app:layout_constraintEnd_toStartOf="@+id/linksKekerasanAnak"
+            app:layout_constraintTop_toTopOf="@+id/linksKekerasanAnak" />
+
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>
