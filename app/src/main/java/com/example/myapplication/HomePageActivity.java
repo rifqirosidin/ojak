@@ -33,10 +33,10 @@ public class HomePageActivity extends AppCompatActivity {
 //        tabStatistik = findViewById(R.id.tab_statistik);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-        if (user == null){
-            Intent intent = new Intent(HomePageActivity.this, LoginActivity.class);
-            startActivity(intent);
-        }
+//        if (user == null){
+//            Intent intent = new Intent(HomePageActivity.this, LoginActivity.class);
+//            startActivity(intent);
+//        }
         tabLayout.addTab(tabLayout.newTab().setText("News"));
         tabLayout.addTab(tabLayout.newTab().setText("Lapor"));
         tabLayout.addTab(tabLayout.newTab().setText("Statistik"));

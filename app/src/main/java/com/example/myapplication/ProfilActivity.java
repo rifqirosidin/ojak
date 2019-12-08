@@ -168,10 +168,10 @@ public class ProfilActivity extends AppCompatActivity {
     public void checkUserAndDisplayProfil() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
-            Intent intent = new Intent(ProfilActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-            Toast.makeText(getApplicationContext(), "Anda belum login", Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(ProfilActivity.this, LoginActivity.class);
+//            startActivity(intent);
+//            finish();
+//            Toast.makeText(getApplicationContext(), "Anda belum login", Toast.LENGTH_SHORT).show();
         } else {
             displayProfil();
         }
