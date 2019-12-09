@@ -25,4 +25,10 @@
         <item>Laki - Laki</item>
         <item>Perempuan</item>
     </string-array>
+
+    <string-array name="grafik">
+        <item>Pelecehan Sosial</item>
+        <item>Pelecehan Keluarga</item>
+        <item>Pelecehan Anak</item>
+    </string-array>
 </resources>

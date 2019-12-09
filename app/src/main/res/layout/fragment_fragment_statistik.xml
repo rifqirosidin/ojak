@@ -18,15 +18,13 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView30"
+        <Spinner
+            android:id="@+id/spinner_grafik"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Pelecehan Sosial"
-            android:textColor="@color/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="32dp"
+            android:entries="@array/grafik" />
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -39,17 +37,6 @@
                 android:layout_margin="5dp" />
         </android.support.v7.widget.CardView>
 
-        <TextView
-            android:id="@+id/textView31"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="8dp"
-            android:text="Tingkat Kekerasan Keluarga"
-            android:textColor="@color/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
@@ -58,19 +45,9 @@
                 android:id="@+id/kekerasan_keluarga_grafik"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                tools:visibility="gone" />
         </android.support.v7.widget.CardView>
-
-        <TextView
-            android:id="@+id/textView32"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="8dp"
-            android:text="Tingkat Kekerasan Anak"
-            android:textColor="@color/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold" />
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -80,7 +57,8 @@
                 android:id="@+id/kekerasan_anak_grafik"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                tools:visibility="gone" />
         </android.support.v7.widget.CardView>
 
     </LinearLayout>

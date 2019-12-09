@@ -55,13 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.loading);
 
 
-//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken(String.valueOf(R.string.CLIENT_ID))
-//                .requestEmail()
-//                .build();
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -84,12 +78,10 @@ public class LoginActivity extends AppCompatActivity {
             switch (requestCode) {
                 case 101:
                     try {
-                        // The Task returned from this call is always completed, no need to attach
-                        // a listener.
+
                         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
                         GoogleSignInAccount account = task.getResult(ApiException.class);
-//                        onLoggedIn(account);
-                        firebaseAuthWithGoogle(account);
+                        onLoggedIn(account);
                     } catch (ApiException e) {
                         // The ApiException status code indicates the detailed failure reason.
                         Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
@@ -99,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onLoggedIn(GoogleSignInAccount account) {
+        disableForm(true);
         Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
         startActivity(intent);
         finish();
@@ -120,13 +113,11 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(intent);
                         } else {
                             progressBar.setVisibility(View.GONE);
-                            // If sign in fails, display a message to the user.
                             Log.w("debug", "signInWithCredential:failure", task.getException());
                             disableForm(true);
                             Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();
                         }
 
-                        // ...
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -210,6 +201,14 @@ public class LoginActivity extends AppCompatActivity {
         if (currentUser != null){
             Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
             startActivity(intent);
+        }
+
+        GoogleSignInAccount alreadyloggedAccount = GoogleSignIn.getLastSignedInAccount(this);
+        if (alreadyloggedAccount != null) {
+            Toast.makeText(this, "Already Logged In", Toast.LENGTH_SHORT).show();
+            onLoggedIn(alreadyloggedAccount);
+        } else {
+            Log.d(TAG, "Not logged in");
         }
     }
 

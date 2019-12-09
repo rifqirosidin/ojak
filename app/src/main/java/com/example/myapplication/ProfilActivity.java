@@ -17,6 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myapplication.model.User;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +46,9 @@ public class ProfilActivity extends AppCompatActivity {
     View dialogView;
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
+    GoogleSignInAccount acc;
+    String uid = "";
+    private GoogleSignInClient googleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +68,12 @@ public class ProfilActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         mRef = database.getReference();
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+         acc = GoogleSignIn.getLastSignedInAccount(this);
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
         checkUserAndDisplayProfil();
 
 
@@ -73,10 +87,16 @@ public class ProfilActivity extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mAuth.signOut();
-                Intent intent = new Intent(ProfilActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                if (acc != null){
+                    logoutGoogle();
+                } else {
+                    mAuth.signOut();
+                    Intent intent = new Intent(ProfilActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+
             }
         }).setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
@@ -90,44 +110,85 @@ public class ProfilActivity extends AppCompatActivity {
 
     }
 
-    public void displayProfil() {
-        tvEmail.setText(user.getEmail());
-        userWithLoginGoogle();
-//        tvDetailProfil.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua");
-        mRef = FirebaseDatabase.getInstance().getReference("users").child(mAuth.getUid());
-
-        mRef.addValueEventListener(new ValueEventListener() {
+    public void logoutGoogle()
+    {
+        googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                try {
-                    tvDetailProfil.setText(user.getAbout());
-                    if (!user.getUsername().isEmpty()){
-                        tvUsername.setText(user.getUsername());
-                        tvBirhtday.setText(user.getBirthday());
-                        tvGender.setText(user.getGender());
-                        tvAlamat.setText(user.getAddress());
-                    }
-
-                } catch (Exception e) {
-                    Log.e("error", e.getMessage());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("error", databaseError.getMessage());
+            public void onComplete(@NonNull Task<Void> task) {
+                //On Succesfull signout we navigate the user back to LoginActivity
+                Intent intent=new Intent(ProfilActivity.this,LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
             }
         });
     }
 
-    public void userWithLoginGoogle() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user.getDisplayName() != null) {
-            tvUsername.setText(user.getDisplayName());
-        }
+    public void displayProfil() {
+        if (acc != null){
+            accGoogle();
+        } else {
+            tvEmail.setText(user.getEmail());
+            mRef = FirebaseDatabase.getInstance().getReference("users").child(mAuth.getUid());
 
+            mRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+                    try {
+                        tvDetailProfil.setText(user.getAbout());
+                        if (!user.getUsername().isEmpty()){
+                            tvUsername.setText(user.getUsername());
+                            tvBirhtday.setText(user.getBirthday());
+                            tvGender.setText(user.getGender());
+                            tvAlamat.setText(user.getAddress());
+                        }
+
+                    } catch (Exception e) {
+                        Log.e("error", e.getMessage());
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e("error", databaseError.getMessage());
+                }
+            });
+        }
     }
+
+    public void accGoogle()
+    {
+        if (acc != null){
+            mRef = FirebaseDatabase.getInstance().getReference("users").child(acc.getId());
+            tvUsername.setText(acc.getDisplayName());
+            tvEmail.setText(acc.getEmail());
+
+            mRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    User user = dataSnapshot.getValue(User.class);
+                    try {
+                        tvDetailProfil.setText(user.getAbout());
+
+                            tvUsername.setText(user.getUsername());
+                            tvBirhtday.setText(user.getBirthday());
+                            tvGender.setText(user.getGender());
+                            tvAlamat.setText(user.getAddress());
+
+
+                    } catch (Exception e) {
+                        Log.e("error", e.getMessage());
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Log.e("error", databaseError.getMessage());
+                }
+            });
+        }
+    }
+
 
     public void backPage(View view) {
         Intent intent = new Intent(ProfilActivity.this, HomePageActivity.class);
@@ -154,7 +215,13 @@ public class ProfilActivity extends AppCompatActivity {
                 mRef = database.getReference("users");
                 HashMap<String, Object> profil = new HashMap<>();
                 profil.put("about", about);
-                mRef.child(user.getUid()).updateChildren(profil);
+
+                if (uid == ""){
+                    uid = acc.getId();
+                } else {
+                    uid = user.getUid();
+                }
+                mRef.child(uid).updateChildren(profil);
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -167,7 +234,7 @@ public class ProfilActivity extends AppCompatActivity {
 
     public void checkUserAndDisplayProfil() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null) {
+        if (currentUser == null && acc == null) {
 //            Intent intent = new Intent(ProfilActivity.this, LoginActivity.class);
 //            startActivity(intent);
 //            finish();
@@ -194,7 +261,12 @@ public class ProfilActivity extends AppCompatActivity {
                 mRef = database.getReference("users");
                 HashMap<String, Object> profil = new HashMap<>();
                 profil.put("birthday", date);
-                mRef.child(user.getUid()).updateChildren(profil);
+                if (uid == "") {
+                    uid = acc.getId();
+                } else {
+                    uid = user.getUid();
+                }
+                mRef.child(uid).updateChildren(profil);
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -219,7 +291,12 @@ public class ProfilActivity extends AppCompatActivity {
                 mRef = database.getReference("users");
                 HashMap<String, Object> profil = new HashMap<>();
                 profil.put("gender", jenisKelamin);
-                mRef.child(user.getUid()).updateChildren(profil);
+                if (uid == "") {
+                    uid = acc.getId();
+                } else {
+                    uid = user.getUid();
+                }
+                mRef.child(uid).updateChildren(profil);
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -244,7 +321,12 @@ public class ProfilActivity extends AppCompatActivity {
                 mRef = database.getReference("users");
                 HashMap<String, Object> profil = new HashMap<>();
                 profil.put("address", alamat);
-                mRef.child(user.getUid()).updateChildren(profil);
+                if (uid == "") {
+                    uid = acc.getId();
+                } else {
+                    uid = user.getUid();
+                }
+                mRef.child(uid).updateChildren(profil);
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
