@@ -169,13 +169,9 @@ public class ProfilActivity extends AppCompatActivity {
                     User user = dataSnapshot.getValue(User.class);
                     try {
                         tvDetailProfil.setText(user.getAbout());
-
-                            tvUsername.setText(user.getUsername());
                             tvBirhtday.setText(user.getBirthday());
                             tvGender.setText(user.getGender());
                             tvAlamat.setText(user.getAddress());
-
-
                     } catch (Exception e) {
                         Log.e("error", e.getMessage());
                     }
@@ -216,11 +212,7 @@ public class ProfilActivity extends AppCompatActivity {
                 HashMap<String, Object> profil = new HashMap<>();
                 profil.put("about", about);
 
-                if (uid == ""){
-                    uid = acc.getId();
-                } else {
-                    uid = user.getUid();
-                }
+               cekUuid();
                 mRef.child(uid).updateChildren(profil);
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -235,10 +227,10 @@ public class ProfilActivity extends AppCompatActivity {
     public void checkUserAndDisplayProfil() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null && acc == null) {
-//            Intent intent = new Intent(ProfilActivity.this, LoginActivity.class);
-//            startActivity(intent);
-//            finish();
-//            Toast.makeText(getApplicationContext(), "Anda belum login", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ProfilActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            Toast.makeText(getApplicationContext(), "Anda belum login", Toast.LENGTH_SHORT).show();
         } else {
             displayProfil();
         }
@@ -261,11 +253,7 @@ public class ProfilActivity extends AppCompatActivity {
                 mRef = database.getReference("users");
                 HashMap<String, Object> profil = new HashMap<>();
                 profil.put("birthday", date);
-                if (uid == "") {
-                    uid = acc.getId();
-                } else {
-                    uid = user.getUid();
-                }
+                cekUuid();
                 mRef.child(uid).updateChildren(profil);
             }
 
@@ -291,11 +279,7 @@ public class ProfilActivity extends AppCompatActivity {
                 mRef = database.getReference("users");
                 HashMap<String, Object> profil = new HashMap<>();
                 profil.put("gender", jenisKelamin);
-                if (uid == "") {
-                    uid = acc.getId();
-                } else {
-                    uid = user.getUid();
-                }
+                cekUuid();
                 mRef.child(uid).updateChildren(profil);
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -321,11 +305,7 @@ public class ProfilActivity extends AppCompatActivity {
                 mRef = database.getReference("users");
                 HashMap<String, Object> profil = new HashMap<>();
                 profil.put("address", alamat);
-                if (uid == "") {
-                    uid = acc.getId();
-                } else {
-                    uid = user.getUid();
-                }
+                cekUuid();
                 mRef.child(uid).updateChildren(profil);
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -335,6 +315,16 @@ public class ProfilActivity extends AppCompatActivity {
             }
         });
         dialog.show();
+    }
+
+    public void cekUuid()
+    {
+        if (user != null) {
+            uid = user.getUid();
+        } else {
+            uid = acc.getId();
+
+        }
     }
 
 }
