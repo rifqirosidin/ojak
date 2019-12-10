@@ -25,10 +25,10 @@ import lecho.lib.hellocharts.view.LineChartView;
 public class FragmentStatistik extends Fragment {
 
     LineChartView lineChartViewPelecehanSosial, kekerasanKeluarga, kekerasanAnak;
-    String[] tahun = {"april", "mei", "juni", "juli", "Agt", "Sept", "OKt", "Nov"};
-    int[] yAxisData = {50, 20, 15, 30, 20, 60, 15};
-    int[] yKeluaga = {80, 10, 15, 30, 80, 60, 25};
-    int[] yAnak = {40, 50, 15, 70, 80, 20, 25};
+    String[] tahun = {"juli", "Agt", "Sept", "OKt", "Nov"};
+    int[] yAxisData = {11,5,1,6,7};
+    int[] yKeluaga = {4, 3, 5, 3, 5};
+    int[] yAnak = {31,14,20,90,16};
 
     List yAxisValues = new ArrayList();
     List yKeluargaValue = new ArrayList();
@@ -42,8 +42,6 @@ public class FragmentStatistik extends Fragment {
     public FragmentStatistik() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

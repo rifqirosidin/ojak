@@ -28,9 +28,6 @@ public class HomePageActivity extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.view_pager);
-//        tabNews = findViewById(R.id.tab_news);
-//        tabLapor = findViewById(R.id.tab_lapor);
-//        tabStatistik = findViewById(R.id.tab_statistik);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 //        if (user == null){

@@ -92,6 +92,9 @@ public class ProfilActivity extends AppCompatActivity {
                 } else {
                     mAuth.signOut();
                     Intent intent = new Intent(ProfilActivity.this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                            | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
                 }
@@ -117,7 +120,9 @@ public class ProfilActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 //On Succesfull signout we navigate the user back to LoginActivity
                 Intent intent=new Intent(ProfilActivity.this,LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
             }
@@ -211,7 +216,6 @@ public class ProfilActivity extends AppCompatActivity {
                 mRef = database.getReference("users");
                 HashMap<String, Object> profil = new HashMap<>();
                 profil.put("about", about);
-
                cekUuid();
                 mRef.child(uid).updateChildren(profil);
             }
