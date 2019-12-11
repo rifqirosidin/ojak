@@ -54,7 +54,6 @@ public class LoginActivity extends AppCompatActivity {
         myRef = database.getReference("users");
         progressBar = findViewById(R.id.loading);
 
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();

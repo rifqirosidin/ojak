@@ -27,7 +27,7 @@ public class FragmentStatistik extends Fragment {
     LineChartView lineChartViewPelecehanSosial, kekerasanKeluarga, kekerasanAnak;
     String[] tahun = {"juli", "Agt", "Sept", "OKt", "Nov"};
     int[] yAxisData = {11,5,1,6,7};
-    int[] yKeluaga = {4, 3, 5, 3, 5};
+    int[] yKeluaga = {40,30,50,30,20};
     int[] yAnak = {31,14,20,90,16};
 
     List yAxisValues = new ArrayList();
@@ -72,8 +72,7 @@ public class FragmentStatistik extends Fragment {
 
         for (int i = 0; i < yAxisData.length; i++){
             yAxisValues.add(new PointValue(i, yAxisData[i]));
-//            yKeluargaValue.add(new PointValue(i, yKeluaga[i]));
-//            yAnakValue.add(new PointValue(i, yAnak[i]));
+//
         }
 
         for (int i = 0; i < yKeluaga.length; i++){
